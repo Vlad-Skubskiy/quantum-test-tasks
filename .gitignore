@@ -1,0 +1,12 @@
+.venv/
+venv/
+ENV/
+
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+
+*.pt
+*.bin
+*.safetensors
+models/
