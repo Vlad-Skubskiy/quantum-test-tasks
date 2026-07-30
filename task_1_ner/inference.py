@@ -19,6 +19,19 @@ class MountainPredictor:
         self.model = AutoModelForTokenClassification.from_pretrained(model_path)
         self.model.eval()
 
+    def _reconstruct_text(self, tokens: list) -> str:
+
+        result = ""
+        for token in tokens:
+            if token.startswith("##"):
+                result += token[2:]
+            else:
+                if result:
+                    result += " " + token
+                else:
+                    result += token
+        return result
+    
     def predict(self, text) -> dict:
 
         inputs = self.tokenizer(
@@ -30,6 +43,11 @@ class MountainPredictor:
         with torch.no_grad():
             outputs = self.model(**inputs)
 
+        inputs = self.tokenizer(text, return_tensors="pt", truncation=True)
+
+        with torch.no_grad():
+            outputs = self.model(**inputs)
+
         predictions = torch.argmax(outputs.logits, dim=2)[0]
         tokens = self.tokenizer.convert_ids_to_tokens(inputs["input_ids"][0])
 
@@ -37,40 +55,34 @@ class MountainPredictor:
         labels = [id2label[p.item()] for p in predictions]
 
         extracted_mountains = []
-        current_mountain = []
+        current_entity_tokens = []
         tokens_with_tags = []
 
         for token, label in zip(tokens, labels):
-
             if token in ["[CLS]", "[SEP]", "[PAD]"]:
                 continue
 
             tokens_with_tags.append((token, label))
+            is_subword = token.startswith("##")
 
-            clean_token = token[2:] if token.startswith('##') else token
-
-            if token.startswith("##"):
-                if current_mountain:
-                    current_mountain[-1] += clean_token
-
+            if is_subword:
+                if current_entity_tokens:
+                    current_entity_tokens.append(token)
             elif label == "B-MOUNTAIN":
-                if current_mountain:
-                    extracted_mountains.append(" ".join(current_mountain))
-                    current_mountain = []
-                current_mountain.append(clean_token)
-
-            elif label == "I-MOUNTAIN" and current_mountain:
-                current_mountain.append(clean_token)
-
+                if current_entity_tokens:
+                    extracted_mountains.append(self._reconstruct_text(current_entity_tokens))
+                    current_entity_tokens = []
+                current_entity_tokens.append(token)
+            elif label == "I-MOUNTAIN" and current_entity_tokens:
+                current_entity_tokens.append(token)
             else:
-                if current_mountain:
-                    extracted_mountains.append(" ".join(current_mountain))
-                    current_mountain = []
+                if current_entity_tokens:
+                    extracted_mountains.append(self._reconstruct_text(current_entity_tokens))
+                    current_entity_tokens = []
 
-        if current_mountain:
-            extracted_mountains.append(" ".join(current_mountain))
-            current_mountain = []
-            
+        if current_entity_tokens:
+            extracted_mountains.append(self._reconstruct_text(current_entity_tokens))
+        
         return {
             "text": text,
             "extracted_mountains": extracted_mountains,
