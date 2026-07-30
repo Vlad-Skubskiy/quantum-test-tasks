@@ -7,18 +7,20 @@ This module implements a Named Entity Recognition (NER) pipeline designed to ide
 ## 📁 Repository Structure
 
 
+```text
 task_1_ner/
 ├── data/
 │   ├── raw_mountains.csv       # Source list of target entities
 │   ├── train_ner_dataset.json  # Training dataset with BIO tagging
 │   └── val_ner_dataset.json    # Validation dataset
-├── saved_model/                
+├── saved_model/                # Fine-tuned model weights & config
 ├── dataset_creation.ipynb      # Notebook detailing dataset generation & EDA
 ├── demo.ipynb                  # Demo notebook
 ├── train.py                    # Fine-tuning training script
 ├── inference.py                # Inference wrapper class & CLI
 ├── mountains_text.txt          # Testing text
 └── README.md                   # Project documentation
+```
 
 ## Architecture & Approach
 
