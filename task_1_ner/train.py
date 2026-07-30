@@ -1,4 +1,5 @@
 import json
+import os
 import numpy as np
 import evaluate
 from datasets import Dataset
@@ -75,7 +76,8 @@ def compute_metrics(p):
 
 def main():
     model_checkpoint = "distilbert-base-uncased"
-    output_dir = "./saved_model"
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    output_dir = os.path.join(base_dir, "saved_model")
 
     tokenizer = AutoTokenizer.from_pretrained(model_checkpoint)
     model = AutoModelForTokenClassification.from_pretrained(
@@ -106,7 +108,7 @@ def main():
         logging_steps=10,
         seed=42
     )
-
+    
     trainer = Trainer(
         model=model,
         args=training_args,
