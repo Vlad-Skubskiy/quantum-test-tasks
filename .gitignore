@@ -5,8 +5,9 @@ ENV/
 __pycache__/
 *.py[cod]
 .ipynb_checkpoints/
-
+results/
 *.pt
 *.bin
 *.safetensors
 models/
+saved_model/
