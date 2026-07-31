@@ -11,3 +11,7 @@ results/
 *.safetensors
 models/
 saved_model/
+
+data/
+data/raw/
+data/processed/
