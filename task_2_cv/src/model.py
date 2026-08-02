@@ -3,6 +3,8 @@ import numpy as np
 import kornia as K
 import cv2
 from kornia.feature import LoFTR
+import ssl
+ssl._create_default_https_context = ssl._create_unverified_context
 
 class SeasonalMatcher:
     def __init__(self, pretrained="outdoor", conf_threshold=0.2, device=None):
