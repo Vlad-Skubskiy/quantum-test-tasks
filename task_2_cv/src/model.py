@@ -53,7 +53,7 @@ class SeasonalMatcher:
         return {"keypoints0": mkpts0,
                 "keypoints1": mkpts1,
                 "confidence": confidence,
-                "inliers_mask": inliers_mask,
+                "inliers_mask": len(inliers_mask),
                 "num_matches": len(mkpts0),
                 "num_inliers": np.sum(len(inliers_mask))
                 }
