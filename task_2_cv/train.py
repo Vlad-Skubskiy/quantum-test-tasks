@@ -38,6 +38,7 @@ def evaluate_pipeline(data_dir="data/processed/val"):
 
     elapsed_time = time.time() - start_time
     report = f"""
+    =======================================
     Time runned:           {elapsed_time:.1f} сек.
     Pairs matched:             {len(total_matches)}
     Mean Matches:     {np.mean(total_matches):.1f}
