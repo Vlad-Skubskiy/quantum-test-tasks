@@ -42,6 +42,6 @@ Welcome! This repository contains structured, modular, and fully documented solu
 
 ---
 
-## 🚀 Quick Start
+##  Quick Start
 
 To run or evaluate either project, navigate into the respective folder and follow its dedicated `README.md`:
