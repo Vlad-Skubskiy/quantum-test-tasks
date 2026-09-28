@@ -19,7 +19,6 @@ task_2_cv/
 ├── src/
 │   └──model.py           
 ├── inference.py                # Inference wrapper class & CLI
-├── mountains_text.txt
 └── README.md                   # Project documentation
 ```
 ##  Architecture & Approach
